@@ -1,5 +1,6 @@
 #ifndef MATRIXD_H
 #define MATRIXD_H
+#include "m.h"
 #include "vectord.h"
 
 class Vectord;

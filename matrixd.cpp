@@ -1,7 +1,9 @@
 #include "matrixd.h"
 
 Matrixd::Matrixd(){
-    
+    width = 0;
+    height = 0;
+    matrix = 0;
 }
 Matrixd::Matrixd(unsigned int width, unsigned int height){
     this->width = width;
@@ -11,7 +13,7 @@ Matrixd::Matrixd(unsigned int width, unsigned int height){
         matrix[i] = new double[height];
     for(int i = 0;i < width;i++)
         for(int j = 0;j < height;j++)
-            matrix[i][j] = 0;
+            matrix[i][j] = 1;
 }
 Matrixd::Matrixd(const Matrixd &copy){
     this->width = copy.width;
@@ -24,11 +26,9 @@ Matrixd::Matrixd(const Matrixd &copy){
             matrix[i][j] = copy.matrix[i][j];
 }
 Matrixd::~Matrixd(){
-    for(int i = 0;i < this->width;i++){
-        for(int j = 0;j < this->height;j++)
-            delete &this->matrix[i][j];
-        delete &this->matrix[i];
-    }
+    for(int i = 0;i < this->width;i++)
+        delete [] this->matrix[i];
+    delete [] &this->matrix;
 }
 
 double* Matrixd::operator [](unsigned int x) const{
@@ -37,11 +37,9 @@ double* Matrixd::operator [](unsigned int x) const{
 
 void Matrixd::operator =(const Matrixd &m){
     //delete
-    for(int i = 0;i < this->width;i++){
-        for(int j = 0;j < this->height;j++)
-            delete &this->matrix[i][j];
-        delete &this->matrix[i];
-    }
+    for(int i = 0;i < this->width;i++)
+        delete [] &this->matrix[i];
+    delete [] &this->matrix;
     //new
     this->width = m.width;
     this->height = m.height;

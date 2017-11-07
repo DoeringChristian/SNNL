@@ -1,7 +1,8 @@
 #include "vectord.h"
 
 Vectord::Vectord(){
-    
+    vect = 0;
+    length = 0;
 }
 Vectord::Vectord(unsigned int length){
     this->length = length;
@@ -17,8 +18,7 @@ Vectord::Vectord(const Vectord &copy){
 }
 
 Vectord::~Vectord(){
-    for(int i = 0;i < this->length;i++)
-        delete &vect[i];
+    delete [] vect;
 }
 
 double& Vectord::operator[](unsigned int index) const{
@@ -37,8 +37,7 @@ Vectord Vectord::operator *(const Matrixd &m) const{
 }
 
 void Vectord::operator =(const Vectord &v){
-    for(int i = 0;i < this->size();i++)
-        delete[] &this->vect[i];
+    delete [] vect;
     this->length = v.size();
     this->vect = new double[length];
     for(int i = 0;i < length;i++)
