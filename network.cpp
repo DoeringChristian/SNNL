@@ -74,9 +74,14 @@ double Network::fitness(const Vectord &comp) const{
 bool Network::SavetoFile(const string file) const{
     ofstream out;
     out.open(file);
-    out << (char)this->size();
+    //output size of network
+    for(int i = 0;i < 4;i++)
+        out << ((char*)&layers)[i];
+    //output size of vectors
     for(int i = 0;i < size();i++)
-        out << (char)sizeAt(i);
+        for(int j = 0;j < 4;j++)
+            out << ((char*)&nodes[i])[j];
+    //output matrices
     for(int i = 0;i < size()-1;i++)
         for(int j = 0;j < m[i].getHeight();j++){
             for(int k = 0;k < m[i].getWidth();k++)
@@ -95,16 +100,24 @@ bool Network::LoadFile(const string file){
     delete [] nodes;
     //make new:
     char c;
-    in.get(c);
-    layers = c;
+    //set length/layers
+    for(int i = 0;i < 4;i++){
+        in.get(c);
+        ((char*)&layers)[i] = c;
+    }
+    //set length of matrices
     this->nodes = new unsigned int[layers];
     for(int i = 0;i < layers;i++){
-        in.get(c);
-        nodes[i] = (unsigned int)c;
+        for(int j = 0;j < 4;j++){
+            in.get(c);
+            ((char*)&nodes[i])[j] = c;
+        }
     }
+    //init input & output vector according to their saved length
     this->input = Vectord(nodes[0]);
     this->output = Vectord(nodes[layers-1]);
     this->m = new Matrixd[layers-1];
+    //setting the values of the matrecis
     for(int i = 0;i < layers-1;i++){
         m[i] = Matrixd(nodes[i],nodes[i+1]);
         for(int j = 0;j < m[i].getHeight();j++)
