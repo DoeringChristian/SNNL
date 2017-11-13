@@ -1,7 +1,7 @@
 #ifndef VECTORD_H
 #define VECTORD_H
 #include "matrixd.h"
-#include "m.h"
+#include <math.h>
 #define M_E 2.71828182846
 
 class Matrixd;

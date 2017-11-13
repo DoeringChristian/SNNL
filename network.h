@@ -1,7 +1,9 @@
 #ifndef NETWORK_H
 #define NETWORK_H
-#include "m.h"
 #include "matrixd.h"
+#include <fstream>
+
+using namespace std;
 
 class Network{
     //variables
@@ -25,6 +27,8 @@ public:
     void setInput(unsigned int index, double value);
     unsigned int sizeAt(unsigned int index) const;
     double fitness(const Vectord &comp) const;
+    bool SavetoFile(const std::string file) const;
+    bool LoadFile(const std::string file);
 };
 
 #endif // NETWORK_H
