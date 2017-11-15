@@ -9,6 +9,7 @@ class Network{
     //variables
     unsigned int layers;
     unsigned int *nodes;
+    double fitness;
 public:
     Vectord input;
     Vectord output;
@@ -16,6 +17,7 @@ public:
     //con-/destructors
     Network();
     Network(unsigned int nodes[], unsigned int layers);
+    Network(const Network &copy);
     ~Network();
     //operators
     void operator=(const Network &n);
@@ -26,9 +28,10 @@ public:
     Vectord getOutput() const;
     void setInput(unsigned int index, double value);
     unsigned int sizeAt(unsigned int index) const;
-    double fitness(const Vectord &comp) const;
     bool SavetoFile(const std::string file) const;
     bool LoadFile(const std::string file);
+    double getFitness() const;
+    void setFitness(double fitness);
 };
 
 #endif // NETWORK_H

@@ -3,6 +3,7 @@
 Network::Network(){
     this->layers = 0;
     this->m = 0;
+    fitness = 0;
     nodes = 0;
 }
 Network::Network(unsigned int nodes[],unsigned int layers){
@@ -16,6 +17,19 @@ Network::Network(unsigned int nodes[],unsigned int layers){
     for(int i = 0;i < layers-1;i++)
         m[i] = Matrixd(nodes[i],nodes[i+1]);
 }
+Network::Network(const Network &copy){
+    fitness = copy.getFitness();
+    this->nodes = new unsigned int[copy.size()];
+    for(int i = 0;i < copy.size();i++)
+        this->nodes[i] = copy.sizeAt(i);
+    this->layers = copy.size();
+    this->input = copy.input;
+    this->output = copy.output;
+    this->m = new Matrixd[copy.size()-1];
+    for(int i = 0;i < layers-1;i++)
+        m[i] = copy[i];
+}
+
 Network::~Network(){
     delete [] this->m;
     delete [] nodes;
@@ -24,6 +38,7 @@ Network::~Network(){
 void Network::operator =(const Network &n){
     delete [] m;
     delete [] nodes;
+    fitness = n.getFitness();
     this->nodes = new unsigned int[n.size()];
     for(int i = 0;i < n.size();i++)
         this->nodes[i] = n.sizeAt(i);
@@ -62,13 +77,6 @@ void Network::setInput(unsigned int index,double value){
 
 unsigned int Network::sizeAt(unsigned int index) const{
     return nodes[index];
-}
-
-double Network::fitness(const Vectord &comp) const{
-    double d = 0;
-    for(int i = 0;i < output.size();i++)
-        d += pow(output[i]-comp[i],2);
-    return sqrt(d);
 }
 
 bool Network::SavetoFile(const string file) const{
@@ -131,7 +139,13 @@ bool Network::LoadFile(const string file){
     return true;
 }
 
+double Network::getFitness() const{
+    return fitness;
+}
 
+void Network::setFitness(double fitness){
+    this->fitness = fitness;
+}
 
 
 
