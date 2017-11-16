@@ -22,7 +22,7 @@ Trainer::~Trainer(){
 }
 
 void Trainer::randomize(){
-    for(int i = 0;i < this->length;i++)
+    for(int i = 1;i < this->length;i++)
         for(int j = 0;j < this->n[i].size()-1;j++)
             for(int k = 0;k < this->n[i][j].getWidth();k++)
                 for(int l = 0;l < this->n[i][j].getHeight();l++)
@@ -40,6 +40,7 @@ Network &Trainer::update(double fitness){
         for(int i = 0;i < length;i++)
             this->n[i] = *tmp;
         this->currentNet = 0;
+        randomize();
     }
     else
         currentNet ++;
