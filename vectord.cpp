@@ -7,13 +7,13 @@ Vectord::Vectord(){
 Vectord::Vectord(unsigned int length){
     this->length = length;
     this->vect = new double[length];
-    for(int i = 0;i < length;i++)
+    for(uint i = 0;i < length;i++)
         this->vect[i] = 0;
 }
 Vectord::Vectord(const Vectord &copy){
     this->length = copy.size();
     this->vect = new double[length];
-    for(int i = 0;i < length;i++)
+    for(uint i = 0;i < length;i++)
         this->vect[i] = copy[i];
 }
 
@@ -28,9 +28,9 @@ double& Vectord::operator[](unsigned int index) const{
 Vectord Vectord::operator *(const Matrixd &m) const{
     //multiplication vector*matrix
     Vectord v(m.getHeight());
-    for(int i = 0;i < m.getHeight();i++){
+    for(uint i = 0;i < m.getHeight();i++){
         double d = 0;
-        for(int j = 0;j < m.getWidth();j++)
+        for(uint j = 0;j < m.getWidth();j++)
             d += m.matrix[j][i]*this->vect[j];
         v[i] = d;
     }
@@ -42,8 +42,9 @@ void Vectord::operator =(const Vectord &v){
     delete [] vect;
     this->length = v.size();
     this->vect = new double[length];
-    for(int i = 0;i < length;i++)
+    for(uint i = 0;i < length;i++)
         this->vect[i] = v[i];
+        
 }
 
 unsigned int Vectord::size() const{
@@ -58,7 +59,7 @@ double sig(double d){
 //sigmoid function for each element in a given vector
 Vectord sig(const Vectord &s){
     Vectord v(s.size());
-    for(int i = 0;i < s.size();i++)
+    for(uint i = 0;i < s.size();i++)
         v[i] = sig(s[i]);
     return v;
 }

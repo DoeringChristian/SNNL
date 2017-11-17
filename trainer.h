@@ -15,8 +15,8 @@ struct Trainer{
     Trainer();
     Trainer(Network n,double randomness,unsigned int population = 5);
     ~Trainer();
-    Network &update(double fitness);
-    void randomize();
+    Network &update(double fitness, double randomness);
+    void randomize(double randomness);
 };
 
 #endif // TRAINER_H

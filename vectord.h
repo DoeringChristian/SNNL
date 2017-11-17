@@ -4,6 +4,8 @@
 #include <math.h>
 #define M_E 2.71828182846
 
+typedef unsigned int uint;
+
 class Matrixd;
 
 class Vectord{

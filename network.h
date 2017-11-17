@@ -10,10 +10,10 @@ class Network{
     unsigned int layers;
     unsigned int *nodes;
     double fitness;
-public:
     Vectord input;
     Vectord output;
     Matrixd *m;
+public:
     //con-/destructors
     Network();
     Network(unsigned int nodes[], unsigned int layers);
@@ -32,6 +32,7 @@ public:
     bool LoadFile(const std::string file);
     double getFitness() const;
     void setFitness(double fitness);
+    void randomize(double randomness);
 };
 
 #endif // NETWORK_H

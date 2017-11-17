@@ -147,6 +147,12 @@ void Network::setFitness(double fitness){
     this->fitness = fitness;
 }
 
+void Network::randomize(double randomness){
+    for(int i = 0;i < this->size();i++)
+        for(int j = 0;j < m[i].getWidth();i++)
+            for(int k = 0;k < m[i].getHeight();k++)
+                m[i][j][k] += (((double)rand() / (double)(RAND_MAX))*2-1)*randomness;
+}
 
 
 
