@@ -7,12 +7,14 @@
 
 using namespace std;
 
+class Network;
+
 class Trainer{
     Network *n;
     unsigned int length;
     double randomness;
-    unsigned int currentNet;
 public:
+    unsigned int currentNet;
     Trainer();
     Trainer(Network n,double randomness,unsigned int population = 5);
     ~Trainer();

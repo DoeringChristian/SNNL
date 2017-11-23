@@ -32,6 +32,7 @@ uint Trainer::size() const{
 Network &Trainer::current() const{
     return n[currentNet];
 }
+
 void Trainer::randomize(double randomness){
     for(uint i = 1;i < this->length;i++)
         n[i].randomize(randomness);           
@@ -39,7 +40,7 @@ void Trainer::randomize(double randomness){
 
 Network &Trainer::update(double fitness,double randomness){
     this->n[currentNet].setFitness(fitness);
-    if(currentNet >= length){
+    if(currentNet >= length-1){
         Network *tmp = &n[0];
         for(uint i = 0;i < length;i++)
             if(n[i].getFitness() < tmp->getFitness())

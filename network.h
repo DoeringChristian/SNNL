@@ -2,6 +2,7 @@
 #define NETWORK_H
 #include "matrixd.h"
 #include <fstream>
+#include "trainer.h"
 
 using namespace std;
 

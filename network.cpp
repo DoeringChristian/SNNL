@@ -9,24 +9,24 @@ Network::Network(){
 Network::Network(unsigned int nodes[],unsigned int layers){
     this->layers = layers;
     this->nodes = new unsigned int[layers];
-    for(int i = 0;i < layers;i++)
+    for(uint i = 0;i < layers;i++)
         this->nodes[i] = nodes[i];
     this->input = Vectord(nodes[0]);
     this->output = Vectord(nodes[layers-1]);
     this->m = new Matrixd[layers-1];
-    for(int i = 0;i < layers-1;i++)
+    for(uint i = 0;i < layers-1;i++)
         m[i] = Matrixd(nodes[i],nodes[i+1]);
 }
 Network::Network(const Network &copy){
     fitness = copy.getFitness();
     this->nodes = new unsigned int[copy.size()];
-    for(int i = 0;i < copy.size();i++)
+    for(uint i = 0;i < copy.size();i++)
         this->nodes[i] = copy.sizeAt(i);
     this->layers = copy.size();
     this->input = copy.input;
     this->output = copy.output;
     this->m = new Matrixd[copy.size()-1];
-    for(int i = 0;i < layers-1;i++)
+    for(uint i = 0;i < layers-1;i++)
         m[i] = copy[i];
 }
 
@@ -40,13 +40,13 @@ void Network::operator =(const Network &n){
     delete [] nodes;
     fitness = n.getFitness();
     this->nodes = new unsigned int[n.size()];
-    for(int i = 0;i < n.size();i++)
+    for(uint i = 0;i < n.size();i++)
         this->nodes[i] = n.sizeAt(i);
     this->layers = n.size();
     this->input = n.input;
     this->output = n.output;
     this->m = new Matrixd[n.size()-1];
-    for(int i = 0;i < layers-1;i++)
+    for(uint i = 0;i < layers-1;i++)
         m[i] = n[i];
 }
 
@@ -56,7 +56,7 @@ Matrixd &Network::operator[](unsigned int index) const{
 
 void Network::update(){
     Vectord v = input;
-    for(int i = 0;i < layers-1;i++) {
+    for(uint i = 0;i < layers-1;i++) {
         v = sig(v*m[i]);
     }
     this->output = v;
@@ -86,14 +86,14 @@ bool Network::SavetoFile(const string file) const{
     for(int i = 0;i < 4;i++)
         out << ((char*)&layers)[i];
     //output size of vectors
-    for(int i = 0;i < size();i++)
+    for(uint i = 0;i < size();i++)
         for(int j = 0;j < 4;j++)
             out << ((char*)&nodes[i])[j];
     //output matrices
-    for(int i = 0;i < size()-1;i++)
-        for(int j = 0;j < m[i].getHeight();j++){
-            for(int k = 0;k < m[i].getWidth();k++)
-                for(int l = 0;l < 8;l++)
+    for(uint i = 0;i < size()-1;i++)
+        for(uint j = 0;j < m[i].getHeight();j++){
+            for(uint k = 0;k < m[i].getWidth();k++)
+                for(uint l = 0;l < 8;l++)
                     out << ((char*)&m[i][k][j])[l];
         }
     out.close();
@@ -115,8 +115,8 @@ bool Network::LoadFile(const string file){
     }
     //set length of matrices
     this->nodes = new unsigned int[layers];
-    for(int i = 0;i < layers;i++){
-        for(int j = 0;j < 4;j++){
+    for(uint i = 0;i < layers;i++){
+        for(uint j = 0;j < 4;j++){
             in.get(c);
             ((char*)&nodes[i])[j] = c;
         }
@@ -126,11 +126,11 @@ bool Network::LoadFile(const string file){
     this->output = Vectord(nodes[layers-1]);
     this->m = new Matrixd[layers-1];
     //setting the values of the matrecis
-    for(int i = 0;i < layers-1;i++){
+    for(uint i = 0;i < layers-1;i++){
         m[i] = Matrixd(nodes[i],nodes[i+1]);
-        for(int j = 0;j < m[i].getHeight();j++)
-            for(int k = 0;k < m[i].getWidth();k++)
-                for(int l = 0;l < 8;l++){
+        for(uint j = 0;j < m[i].getHeight();j++)
+            for(uint k = 0;k < m[i].getWidth();k++)
+                for(uint l = 0;l < 8;l++){
                     in.get(c);
                     ((char*)&m[i][k][j])[l] = c;
                 }
@@ -148,9 +148,9 @@ void Network::setFitness(double fitness){
 }
 
 void Network::randomize(double randomness){
-    for(int i = 0;i < this->size();i++)
-        for(int j = 0;j < m[i].getWidth();i++)
-            for(int k = 0;k < m[i].getHeight();k++)
+    for(uint i = 0;i < this->size()-1;i++)
+        for(uint j = 0;j < m[i].getWidth();j++)
+            for(uint k = 0;k < m[i].getHeight();k++)
                 m[i][j][k] += (((double)rand() / (double)(RAND_MAX))*2-1)*randomness;
 }
 
