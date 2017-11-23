@@ -14,12 +14,12 @@ int main(){
     Network n2;
     n2 = tr.update(1,0.001);
     n2.setInput(1,10);
-    while(true){
-        for(int i = 0;i < 1000;i++){
-            n2.update();
-            cout << tr.currentNet << "|" << i << "|" << n2.getOutput()[0] << "|" << n2.getOutput()[1] << endl;
+    for(int i = 0;i < 100;i++){
+        for(int j = 0;j < 100;j++){
+            n.setInput(i,j);
+            n.update();
+            cout << n.getOutput()[0] << "|" << n.getOutput()[1] << endl;
         }
-        n2 = tr.update(1,0.001);
     }
     return 0;
 }

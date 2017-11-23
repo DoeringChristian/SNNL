@@ -31,7 +31,7 @@ Vectord Vectord::operator *(const Matrixd &m) const{
     for(uint i = 0;i < m.getHeight();i++){
         double d = 0;
         for(uint j = 0;j < m.getWidth();j++)
-            d += m.matrix[j][i]*this->vect[j];
+            d += m[j][i]*this->vect[j];
         v[i] = d;
     }
     return v;
@@ -53,7 +53,7 @@ unsigned int Vectord::size() const{
 
 
 double sig(double d){
-    return 1/(1+pow(M_E,d));
+    return 1/(1+pow(M_E,-d));
 }
 
 //sigmoid function for each element in a given vector
