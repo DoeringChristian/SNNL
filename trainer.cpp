@@ -41,12 +41,12 @@ void Trainer::randomize(double randomness){
 Network &Trainer::update(double fitness,double randomness){
     this->n[currentNet].setFitness(fitness);
     if(currentNet >= length-1){
-        Network *tmp = &n[0];
+        Network tmp = n[0];
         for(uint i = 0;i < length;i++)
-            if(n[i].getFitness() < tmp->getFitness())
-                tmp = &n[i];
+            if(n[i].getFitness() < tmp.getFitness())
+                tmp = n[i];
         for(uint i = 0;i < length;i++)
-            this->n[i] = *tmp;
+            this->n[i] = tmp;
         this->currentNet = 0;
         randomize(randomness);
     }
