@@ -3,6 +3,7 @@
 Network::Network(){
     this->layers = 0;
     this->m = 0;
+    this->v = 0;
     fitness = 0;
     nodes = 0;
 }
@@ -11,11 +12,12 @@ Network::Network(unsigned int nodes[],unsigned int layers){
     this->nodes = new unsigned int[layers];
     for(uint i = 0;i < layers;i++)
         this->nodes[i] = nodes[i];
-    this->input = Vectord(nodes[0]);
-    this->output = Vectord(nodes[layers-1]);
+    this->v = new Vectord[layers];
     this->m = new Matrixd[layers-1];
     for(uint i = 0;i < layers-1;i++)
         m[i] = Matrixd(nodes[i],nodes[i+1]);
+    for(uint i = 0;i < layers;i++)
+        v[i] = Vectord(nodes[i]);
 }
 Network::Network(const Network &copy){
     fitness = copy.getFitness();
@@ -23,43 +25,51 @@ Network::Network(const Network &copy){
     for(uint i = 0;i < copy.size();i++)
         this->nodes[i] = copy.sizeAt(i);
     this->layers = copy.size();
-    this->input = copy.input;
-    this->output = copy.output;
+    this->v = new Vectord[copy.size()];
     this->m = new Matrixd[copy.size()-1];
     for(uint i = 0;i < layers-1;i++)
         m[i] = copy[i];
+    for(uint i = 0;i < layers;i++)
+        v[i] = copy(i);
 }
 
 Network::~Network(){
     delete [] this->m;
+    delete [] this->v;
     delete [] nodes;
 }
 
 void Network::operator =(const Network &n){
     delete [] m;
     delete [] nodes;
+    delete [] v;
     fitness = n.getFitness();
     this->nodes = new unsigned int[n.size()];
     for(uint i = 0;i < n.size();i++)
         this->nodes[i] = n.sizeAt(i);
     this->layers = n.size();
-    this->input = n.input;
-    this->output = n.output;
+    this->v = new Vectord[n.size()];
     this->m = new Matrixd[n.size()-1];
     for(uint i = 0;i < layers-1;i++)
         m[i] = n[i];
+    for(uint i = 0;i < layers;i++)
+        v[i] = n(i);
 }
 
 Matrixd &Network::operator[](unsigned int index) const{
     return m[index];
 }
 
+Vectord &Network::operator ()(unsigned int index) const{
+    return v[index];
+}
+
 void Network::update(){
-    Vectord v = input;
+    Vectord v = this->v[0];
     for(uint i = 0;i < layers-1;i++) {
         v = sig(v*m[i]);
+        this->v[i+1] = v;
     }
-    this->output = v;
 }
 
 unsigned int Network::size() const{
@@ -67,12 +77,12 @@ unsigned int Network::size() const{
 }
 
 Vectord Network::getOutput() const{
-    return output;
+    return this->v[layers-1];
 }
 
 void Network::setInput(unsigned int index,double value){
     if(index < nodes[0])
-        this->input[index] = value;
+        this->v[0][index] = value;
 }
 
 unsigned int Network::sizeAt(unsigned int index) const{
@@ -121,9 +131,9 @@ bool Network::LoadFile(const string file){
             ((char*)&nodes[i])[j] = c;
         }
     }
-    //init input & output vector according to their saved length
-    this->input = Vectord(nodes[0]);
-    this->output = Vectord(nodes[layers-1]);
+    //init vector array according to it's lengths
+    for(uint i = 0;i < layers;i++)
+        v[i] = Vectord(nodes[i]);
     this->m = new Matrixd[layers-1];
     //setting the values of the matrecis
     for(uint i = 0;i < layers-1;i++){

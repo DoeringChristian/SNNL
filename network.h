@@ -11,9 +11,8 @@ class Network{
     unsigned int layers;
     unsigned int *nodes;
     double fitness;
-    Vectord input;
-    Vectord output;
     Matrixd *m;
+    Vectord *v;
 public:
     //con-/destructors
     Network();
@@ -23,6 +22,7 @@ public:
     //operators
     void operator=(const Network &n);
     Matrixd &operator[](unsigned int index) const;
+    Vectord &operator()(unsigned int index) const;
     //functions
     void update();
     unsigned int size() const;
