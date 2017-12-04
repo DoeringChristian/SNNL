@@ -1,8 +1,10 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 #include "matrixd.h"
+#include <iostream>
 #include <fstream>
 #include "trainer.h"
+#include <stdlib.h>
 
 using namespace std;
 

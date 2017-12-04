@@ -89,7 +89,7 @@ unsigned int Network::sizeAt(unsigned int index) const{
 
 bool Network::SavetoFile(const string file) const{
     ofstream out;
-    out.open(file);
+    out.open(file.c_str());
     //output size of network
     for(int i = 0;i < 4;i++)
         out << ((char*)&layers)[i];
@@ -110,7 +110,7 @@ bool Network::SavetoFile(const string file) const{
 
 bool Network::LoadFile(const string file){
     ifstream in;
-    in.open(file);
+    in.open(file.c_str());
     //delete old:
     delete [] this->m;
     delete [] nodes;
