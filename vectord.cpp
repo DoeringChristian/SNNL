@@ -53,7 +53,7 @@ unsigned int Vectord::size() const{
 
 
 double sig(double d){
-    return 1/(1+pow(M_E,-d));
+    return 1/(1+pow(E,-d));
 }
 
 //sigmoid function for each element in a given vector

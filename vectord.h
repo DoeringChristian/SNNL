@@ -2,7 +2,7 @@
 #define VECTORD_H
 #include "matrixd.h"
 #include <math.h>
-#define M_E 2.71828182846
+#define E 2.71828182846
 
 typedef unsigned int uint;
 
