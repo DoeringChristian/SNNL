@@ -65,11 +65,9 @@ Vectord &Network::operator ()(unsigned int index) const{
 }
 
 void Network::update(){
-    Vectord v = this->v[0];
-    for(uint i = 0;i < layers-1;i++) {
-        v = sig(v*m[i]);
-        this->v[i+1] = v;
-    }
+    for(uint i = 0;i < layers-1;i++)
+        this->v[i+1] = sig(this->v[i]*m[i]);
+        
 }
 
 unsigned int Network::size() const{
