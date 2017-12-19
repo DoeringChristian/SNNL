@@ -28,7 +28,7 @@ Matrixd::Matrixd(const Matrixd &copy){
 Matrixd::~Matrixd(){
     for(uint i = 0;i < this->width;i++)
         delete [] this->matrix[i];
-    delete [] &this->matrix;
+    delete [] this->matrix;
 }
 
 double* Matrixd::operator [](unsigned int x) const{
@@ -38,8 +38,8 @@ double* Matrixd::operator [](unsigned int x) const{
 void Matrixd::operator =(const Matrixd &m){
     //delete
     for(uint i = 0;i < this->width;i++)
-        delete [] &this->matrix[i];
-    delete [] &this->matrix;
+        delete [] this->matrix[i];
+    delete [] this->matrix;
     //new
     this->width = m.width;
     this->height = m.height;
