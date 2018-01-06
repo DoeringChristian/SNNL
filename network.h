@@ -15,7 +15,6 @@ class Network{
     double fitness;
     Matrixd *m;
     Vectord *v;
-    Vectord *bias;
 public:
     //con-/destructors
     Network();
