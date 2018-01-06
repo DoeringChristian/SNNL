@@ -22,6 +22,7 @@ public:
     double& operator[](unsigned int index) const;
     Vectord operator*(const Matrixd &m) const;
     void operator =(const Vectord &v);
+    Vectord operator+(const Vectord &v) const;
     //getters
     unsigned int size() const;
 };

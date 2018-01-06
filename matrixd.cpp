@@ -13,7 +13,7 @@ Matrixd::Matrixd(unsigned int width, unsigned int height){
         matrix[i] = new double[height];
     for(uint i = 0;i < width;i++)
         for(uint j = 0;j < height;j++)
-            matrix[i][j] = 1;
+            matrix[i][j] = 0;
 }
 Matrixd::Matrixd(const Matrixd &copy){
     this->width = copy.width;
