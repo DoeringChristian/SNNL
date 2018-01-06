@@ -37,6 +37,13 @@ Vectord Vectord::operator *(const Matrixd &m) const{
     return v;
 }
 
+Vectord Vectord::operator +(const Vectord &v) const{
+    Vectord v2(this->length);
+    if(v.size() == this->size())
+        for(uint i = 0;i < v.size();i++)
+            v2[i] == v[i]+this->vect[i];
+}
+
 void Vectord::operator =(const Vectord &v){
     //= operator to copy the values of the pointer-array
     delete [] vect;
