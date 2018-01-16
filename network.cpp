@@ -123,40 +123,44 @@ bool Network::SavetoFile(const string file) const{
 bool Network::LoadFile(const string file){
     ifstream in;
     in.open(file.c_str());
-    //delete old:
-    delete [] this->m;
-    delete [] nodes;
-    //make new:
-    char c;
-    //set length/layers
-    for(int i = 0;i < 4;i++){
-        in.get(c);
-        ((char*)&layers)[i] = c;
-    }
-    //set length of matrices
-    this->nodes = new unsigned int[layers];
-    for(uint i = 0;i < layers;i++){
-        for(uint j = 0;j < 4;j++){
-            in.get(c);
-            ((char*)&nodes[i])[j] = c;
-        }
-    }
-    //init vector array according to it's lengths
-    for(uint i = 0;i < layers;i++)
-        v[i] = Vectord(nodes[i]);
-    this->m = new Matrixd[layers-1];
-    //setting the values of the matrecis
-    for(uint i = 0;i < layers-1;i++){
-        m[i] = Matrixd(nodes[i],nodes[i+1]);
-        for(uint j = 0;j < m[i].getHeight();j++)
-            for(uint k = 0;k < m[i].getWidth();k++)
-                for(uint l = 0;l < 8;l++){
-                    in.get(c);
-                    ((char*)&m[i][k][j])[l] = c;
-                }
-                    
-    }
-    return true;
+    if(in.good()){
+	    //delete old:
+	    delete [] this->m;
+	    delete [] nodes;
+	    //make new:
+	    char c;
+	    //set length/layers
+	    for(int i = 0;i < 4;i++){
+	        in.get(c);
+	        ((char*)&layers)[i] = c;
+	    }
+	    //set length of matrices
+	    this->nodes = new unsigned int[layers];
+	    for(uint i = 0;i < layers;i++){
+	        for(uint j = 0;j < 4;j++){
+	            in.get(c);
+	            ((char*)&nodes[i])[j] = c;
+	        }
+	    }
+	    //init vector array according to it's lengths
+	    for(uint i = 0;i < layers;i++)
+	        v[i] = Vectord(nodes[i]);
+	    this->m = new Matrixd[layers-1];
+	    //setting the values of the matrecis
+	    for(uint i = 0;i < layers-1;i++){
+	        m[i] = Matrixd(nodes[i],nodes[i+1]);
+	        for(uint j = 0;j < m[i].getHeight();j++)
+	            for(uint k = 0;k < m[i].getWidth();k++)
+	                for(uint l = 0;l < 8;l++){
+	                    in.get(c);
+	                    ((char*)&m[i][k][j])[l] = c;
+	                }
+	                    
+	    }
+	    return true;
+	}
+	else
+		return false;
 }
 
 double Network::getFitness() const{
