@@ -42,9 +42,17 @@ Network &Trainer::update(double fitness,double randomness){
     this->n[currentNet].setFitness(fitness);
     if(currentNet >= length-1){
         Network tmp = n[0];
+        Network tmp2 = n[0];
+        Network *t;
         for(uint i = 0;i < length;i++)
-            if(n[i].getFitness() < tmp.getFitness())
+            if(n[i].getFitness() < tmp.getFitness()){
                 tmp = n[i];
+                t = &n[i];
+            }
+        for(uint i = 0;i < length;i++)
+            if(n[i].getFitness() < tmp2.getFitness() && &n[i] != t)
+                tmp2 = n[i];
+        tmp += tmp2;
         for(uint i = 0;i < length;i++)
             this->n[i] = tmp;
         this->currentNet = 0;
