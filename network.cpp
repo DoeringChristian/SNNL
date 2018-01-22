@@ -111,22 +111,26 @@ bool Network::SavetoFile(const string file) const{
             out << ((char*)&nodes[i])[j];
     //output matrices
     for(uint i = 0;i < size()-1;i++)
-        for(uint j = 0;j < m[i].getHeight();j++){
+        for(uint j = 0;j < m[i].getHeight();j++)
             for(uint k = 0;k < m[i].getWidth();k++)
                 for(uint l = 0;l < 8;l++)
                     out << ((char*)&m[i][k][j])[l];
-        }
+    //output bias
+    for(uint i = 0;i < size()-1;i++)
+        for(uint j = 0;j < nodes[i];j++)
+            for(uint k = 0;k < 8;k++)
+                out << ((char*)&bias[i][j])[k];
     out.close();
     return true;
 }
 
 bool Network::LoadFile(const string file){
-    ifstream in;
-    in.open(file.c_str());
+    ifstream in(file.c_str());
     if(in.good()){
 	    //delete old:
 	    delete [] this->m;
 	    delete [] nodes;
+        delete [] bias;
 	    //make new:
 	    char c;
 	    //set length/layers
@@ -150,17 +154,28 @@ bool Network::LoadFile(const string file){
 	    for(uint i = 0;i < layers-1;i++){
 	        m[i] = Matrixd(nodes[i],nodes[i+1]);
 	        for(uint j = 0;j < m[i].getHeight();j++)
-	            for(uint k = 0;k < m[i].getWidth();k++)
-	                for(uint l = 0;l < 8;l++){
+                for(uint k = 0;k < m[i].getWidth();k++)
+                    for(uint l = 0;l < 8;l++){
 	                    in.get(c);
 	                    ((char*)&m[i][k][j])[l] = c;
-	                }
-	                    
+                    }      
 	    }
+        //input bias
+        this->bias = new Vectord[size()-1];
+        for(uint i = 0;i < size()-1;i++){
+            bias[i] = Vectord(nodes[i+1]);
+            for(uint j = 0;j < nodes[i+1];j++)
+                for(uint k = 0;k < 8;k++){
+                    in.get(c);
+                    ((char*)&bias[i][j])[k] = c;
+                }
+        }
+        
 	    return true;
 	}
 	else
 		return false;
+    in.close();
 }
 
 double Network::getFitness() const{
