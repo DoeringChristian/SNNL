@@ -68,6 +68,24 @@ void Network::operator =(const Network &n){
         bias[i] = n.bias[i];
 }
 
+bool Network::operator +=(const Network &partner){
+    srand(time(0));
+    if(size() != partner.size())
+        return false;
+    for(uint i = 0;i < size();i++)
+        if(this->sizeAt(i) != partner.sizeAt(i))
+            return false;
+    for(uint i = 0;i < this->size()-1;i++)
+        for(uint j = 0;j < this->m[i].getWidth();j++)
+            for(uint k = 0;k < this->m[i].getHeight();k++)
+                if((int)rand() % 2 == 0)
+                    this->m[i][j][k] = partner[i][j][k];
+    for(uint i = 0;i < this->size()-1;i++)
+        if((int)rand() % 2 == 0)
+            this->bias[i] = partner.bias[i];
+    return true;
+}
+
 Matrixd &Network::operator[](unsigned int index) const{
     return m[index];
 }
@@ -176,6 +194,7 @@ bool Network::LoadFile(const string file){
 	else
 		return false;
     in.close();
+    return true;
 }
 
 double Network::getFitness() const{

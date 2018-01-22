@@ -16,6 +16,7 @@ class Network{
     Matrixd *m;
     Vectord *v;
     Vectord *bias;
+    double randomness;
 public:
     //con-/destructors
     Network();
@@ -26,6 +27,7 @@ public:
     void operator=(const Network &n);
     Matrixd &operator[](unsigned int index) const;
     Vectord &operator()(unsigned int index) const;
+    bool operator +=(const Network &partner);
     //functions
     void update();
     unsigned int size() const;
