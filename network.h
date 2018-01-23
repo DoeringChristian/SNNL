@@ -27,6 +27,7 @@ public:
     void operator=(const Network &n);
     Matrixd &operator[](unsigned int index) const;
     Vectord &operator()(unsigned int index) const;
+    Vectord &getbias(unsigned int index) const;
     bool operator +=(const Network &partner);
     //functions
     void update();
@@ -38,7 +39,7 @@ public:
     bool LoadFile(const std::string file);
     double getFitness() const;
     void setFitness(double fitness);
-    void randomize(double randomness);
+    void randomize(double randomness, double shift);
 };
 
 #endif // NETWORK_H

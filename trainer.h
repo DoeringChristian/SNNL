@@ -21,8 +21,8 @@ public:
     Network &operator[](uint index) const;
     uint size() const;
     Network &current() const;
-    Network &update(double fitness, double randomness);
-    void randomize(double randomness);
+    Network &update(double fitness, double randomness,double shift);
+    void randomize(double randomness, double shift);
     void setRandomness(double randomness);
 };
 

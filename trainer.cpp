@@ -14,7 +14,7 @@ Trainer::Trainer(Network n, double randomness, unsigned int population){
     for(uint i = 0;i < population;i++)
         this->n[i] = n;
     this->currentNet = 0;
-    randomize(randomness);
+    randomize(randomness,2);
 }
 
 Trainer::~Trainer(){
@@ -33,30 +33,33 @@ Network &Trainer::current() const{
     return n[currentNet];
 }
 
-void Trainer::randomize(double randomness){
+void Trainer::randomize(double randomness,double shift){
+    srand(time(0));
     for(uint i = 1;i < this->length;i++)
-        n[i].randomize(randomness);           
+        n[i].randomize(randomness,shift);           
 }
 
-Network &Trainer::update(double fitness,double randomness){
+Network &Trainer::update(double fitness, double randomness, double shift){
     this->n[currentNet].setFitness(fitness);
     if(currentNet >= length-1){
         Network tmp = n[0];
         Network tmp2 = n[0];
-        Network *t;
+        uint t1 = 0;
         for(uint i = 0;i < length;i++)
             if(n[i].getFitness() < tmp.getFitness()){
                 tmp = n[i];
-                t = &n[i];
+                t1 = i;
             }
         for(uint i = 0;i < length;i++)
-            if(n[i].getFitness() < tmp2.getFitness() && &n[i] != t)
+            if(n[i].getFitness() < tmp2.getFitness() && i != t1){
                 tmp2 = n[i];
+                cout << t1 << "|" << i << endl;
+            }
         tmp += tmp2;
         for(uint i = 0;i < length;i++)
             this->n[i] = tmp;
         this->currentNet = 0;
-        randomize(randomness);
+        randomize(randomness,shift);
     }
     else
         currentNet ++;

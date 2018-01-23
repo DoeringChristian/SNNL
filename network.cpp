@@ -69,7 +69,6 @@ void Network::operator =(const Network &n){
 }
 
 bool Network::operator +=(const Network &partner){
-    srand(time(0));
     if(size() != partner.size())
         return false;
     for(uint i = 0;i < size();i++)
@@ -205,16 +204,22 @@ void Network::setFitness(double fitness){
     this->fitness = fitness;
 }
 
-void Network::randomize(double randomness){
+void Network::randomize(double randomness,double shift){
     for(uint i = 0;i < this->size()-1;i++)
         for(uint j = 0;j < m[i].getWidth();j++)
             for(uint k = 0;k < m[i].getHeight();k++)
-                m[i][j][k] += (((double)rand() / (double)(RAND_MAX))*2-1)*randomness;
+                if(rand()/(RAND_MAX+1.0) < randomness)
+                    m[i][j][k] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
     for(uint i = 0;i < layers-1;i++)
         for(uint j = 0;j < this->bias[i].size();j++)
-            bias[i][j] += (((double)rand() / (double)(RAND_MAX))*2-1)*randomness;
+            if(rand()/(RAND_MAX+1.0) < randomness)
+                bias[i][j] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
 }
 
+
+Vectord &Network::getbias(unsigned int index) const{
+    return bias[index];
+}
 
 
 
