@@ -8,7 +8,7 @@ Network::Network(){
     fitness = 0;
     nodes = 0;
 }
-Network::Network(unsigned int nodes[],unsigned int layers){
+Network::Network(unsigned int nodes[], unsigned int layers){
     this->layers = layers;
     this->nodes = new unsigned int[layers];
     for(uint i = 0;i < layers;i++)
@@ -121,24 +121,16 @@ unsigned int Network::sizeAt(unsigned int index) const{
 bool Network::SavetoFile(const string file) const{
     ofstream out;
     out.open(file.c_str());
-    //output size of network
-    for(int i = 0;i < 4;i++)
-        out << ((char*)&layers)[i];
-    //output size of vectors
-    for(uint i = 0;i < size();i++)
-        for(int j = 0;j < 4;j++)
-            out << ((char*)&nodes[i])[j];
-    //output matrices
-    for(uint i = 0;i < size()-1;i++)
-        for(uint j = 0;j < m[i].getHeight();j++)
-            for(uint k = 0;k < m[i].getWidth();k++)
-                for(uint l = 0;l < 8;l++)
-                    out << ((char*)&m[i][k][j])[l];
-    //output bias
-    for(uint i = 0;i < size()-1;i++)
-        for(uint j = 0;j < nodes[i];j++)
-            for(uint k = 0;k < 8;k++)
-                out << ((char*)&bias[i][j])[k];
+    out << this->layers << endl;
+    for(uint i = 0;i < this->size();i++)
+        out << this->nodes[i] << endl;
+    for(uint i = 0;i < this->size()-1;i++)
+        for(uint j = 0;j < this->m[i].getWidth();j++)
+            for(uint k = 0;k < this->m[i].getHeight();k++)
+                out << this->m[i][j][k] << endl;
+    for(uint i = 0;i < this->size()-1;i++)
+        for(uint j = 0;j < this->bias[i].size();j++)
+            out << this->bias[i][j] << endl;
     out.close();
     return true;
 }
@@ -149,45 +141,38 @@ bool Network::LoadFile(const string file){
 	    //delete old:
 	    delete [] this->m;
 	    delete [] nodes;
+        delete [] this->v;
         delete [] bias;
 	    //make new:
-	    char c;
-	    //set length/layers
-	    for(int i = 0;i < 4;i++){
-	        in.get(c);
-	        ((char*)&layers)[i] = c;
-	    }
-	    //set length of matrices
-	    this->nodes = new unsigned int[layers];
-	    for(uint i = 0;i < layers;i++){
-	        for(uint j = 0;j < 4;j++){
-	            in.get(c);
-	            ((char*)&nodes[i])[j] = c;
-	        }
-	    }
-	    //init vector array according to it's lengths
-	    for(uint i = 0;i < layers;i++)
-	        v[i] = Vectord(nodes[i]);
-	    this->m = new Matrixd[layers-1];
-	    //setting the values of the matrecis
-	    for(uint i = 0;i < layers-1;i++){
-	        m[i] = Matrixd(nodes[i],nodes[i+1]);
-	        for(uint j = 0;j < m[i].getHeight();j++)
-                for(uint k = 0;k < m[i].getWidth();k++)
-                    for(uint l = 0;l < 8;l++){
-	                    in.get(c);
-	                    ((char*)&m[i][k][j])[l] = c;
-                    }      
-	    }
-        //input bias
-        this->bias = new Vectord[size()-1];
+	    string line;
+        getline(in,line);
+        layers = atoi(line.c_str());
+        nodes = new uint[layers];
+        for(uint i = 0;i < this->layers;i++){
+            getline(in,line);
+            nodes[i] = atoi(line.c_str());
+        }
+        
+        bias = new Vectord[this->layers-1];
+        m = new Matrixd[this->layers-1];
+        v = new Vectord[this->layers];
+        
+        for(uint i = 0;i < this->layers;i++)
+            v[i] = Vectord(nodes[i]);
+        
         for(uint i = 0;i < size()-1;i++){
-            bias[i] = Vectord(nodes[i+1]);
-            for(uint j = 0;j < nodes[i+1];j++)
-                for(uint k = 0;k < 8;k++){
-                    in.get(c);
-                    ((char*)&bias[i][j])[k] = c;
+            m[i] = Matrixd(this->nodes[i],this->nodes[i+1]);
+            for(uint j = 0;j < this->nodes[i];j++)
+                for(uint k = 0;k < this->nodes[i+1];k++){
+                    getline(in,line);
+                    m[i][j][k] = atof(line.c_str());
                 }
+        }
+        for(uint i = 0;i < this->size()-1;i++){
+            bias[i] = Vectord(nodes[i+1]);
+            for(uint j = 0;j < this->nodes[i+1];j++){
+                bias[i][j] = atof(line.c_str());
+            }
         }
         
 	    return true;
@@ -216,6 +201,7 @@ void Network::randomize(double randomness,double shift){
         for(uint j = 0;j < this->bias[i].size();j++)
             if(rand()/(RAND_MAX+1.0) < randomness)
                 bias[i][j] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
+            
 }
 
 

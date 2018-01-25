@@ -34,7 +34,6 @@ Network &Trainer::current() const{
 }
 
 void Trainer::randomize(double randomness,double shift){
-    srand(time(0));
     for(uint i = 1;i < this->length;i++)
         n[i].randomize(randomness,shift);           
 }
@@ -55,9 +54,10 @@ Network &Trainer::update(double fitness, double randomness, double shift){
                 tmp2 = n[i];
                 cout << t1 << "|" << i << endl;
             }
-        tmp += tmp2;
         for(uint i = 0;i < length;i++)
             this->n[i] = tmp;
+        for(uint i = 0;i < length;i++)
+            this->n[i] += tmp2;
         this->currentNet = 0;
         randomize(randomness,shift);
     }
