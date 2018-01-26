@@ -14,7 +14,7 @@ Trainer::Trainer(Network n, double randomness, unsigned int population){
     for(uint i = 0;i < population;i++)
         this->n[i] = n;
     this->currentNet = 0;
-    randomize(randomness,2);
+    randomize(randomness,2,0);
 }
 
 Trainer::~Trainer(){
@@ -33,8 +33,8 @@ Network &Trainer::current() const{
     return n[currentNet];
 }
 
-void Trainer::randomize(double randomness,double shift){
-    for(uint i = 1;i < this->length;i++)
+void Trainer::randomize(double randomness,double shift,uint start){
+    for(uint i = start;i < this->length;i++)
         n[i].randomize(randomness,shift);           
 }
 
@@ -56,10 +56,10 @@ Network &Trainer::update(double fitness, double randomness, double shift){
             }
         for(uint i = 0;i < length;i++)
             this->n[i] = tmp;
-        for(uint i = 0;i < length;i++)
+        for(uint i = 1;i < length;i++)
             this->n[i] += tmp2;
         this->currentNet = 0;
-        randomize(randomness,shift);
+        randomize(randomness,shift,2);
     }
     else
         currentNet ++;

@@ -17,10 +17,11 @@ class Network{
     Vectord *v;
     Vectord *bias;
     double randomness;
+    bool has_bias;
 public:
     //con-/destructors
     Network();
-    Network(unsigned int nodes[], unsigned int layers);
+    Network(unsigned int nodes[], unsigned int layers,bool has_bias = true);
     Network(const Network &copy);
     ~Network();
     //operators

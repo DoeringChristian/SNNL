@@ -7,8 +7,9 @@ Network::Network(){
     this->bias = 0;
     fitness = 0;
     nodes = 0;
+    has_bias = true;
 }
-Network::Network(unsigned int nodes[], unsigned int layers){
+Network::Network(unsigned int nodes[], unsigned int layers, bool has_bias){
     this->layers = layers;
     this->nodes = new unsigned int[layers];
     for(uint i = 0;i < layers;i++)
@@ -20,8 +21,12 @@ Network::Network(unsigned int nodes[], unsigned int layers){
         m[i] = Matrixd(nodes[i],nodes[i+1]);
     for(uint i = 0;i < layers;i++)
         v[i] = Vectord(nodes[i]);
-    for(uint i = 0;i < layers-1;i++)
-        bias[i] = Vectord(nodes[i+1]);
+    if(has_bias)
+        for(uint i = 0;i < layers-1;i++)
+            bias[i] = Vectord(nodes[i+1]);
+    else 
+        bias = 0;
+    this->has_bias = has_bias;
 }
 Network::Network(const Network &copy){
     fitness = copy.getFitness();
@@ -31,19 +36,32 @@ Network::Network(const Network &copy){
     this->layers = copy.size();
     this->v = new Vectord[copy.size()];
     this->m = new Matrixd[copy.size()-1];
-    this->bias = new Vectord[copy.size()-1];
     for(uint i = 0;i < layers-1;i++)
         m[i] = copy[i];
     for(uint i = 0;i < layers;i++)
         v[i] = copy(i);
-    for(uint i = 0;i < layers-1;i++)
-        bias[i] = copy.bias[i];
+    if(copy.has_bias){
+        this->bias = new Vectord[copy.size()-1];
+        for(uint i = 0;i < layers-1;i++)
+            bias[i] = copy.bias[i];
+        this->has_bias = true;
+    }
+    else{
+        uint max_size = 0;
+        for(uint i = 0;i < layers-1;i++)
+            if(this->nodes[i+1] > max_size)
+                max_size = nodes[i+1];
+        this->bias = new Vectord(max_size);
+        this->has_bias = false;
+    }
+        
 }
 
 Network::~Network(){
     delete [] this->m;
     delete [] this->v;
-    delete [] this->bias;
+    if(has_bias)
+        delete [] this->bias;
     delete [] nodes;
 }
 
@@ -51,7 +69,8 @@ void Network::operator =(const Network &n){
     delete [] m;
     delete [] nodes;
     delete [] v;
-    delete [] bias;
+    if(this->has_bias)
+        delete [] bias;
     fitness = n.getFitness();
     this->nodes = new unsigned int[n.size()];
     for(uint i = 0;i < n.size();i++)
@@ -64,8 +83,20 @@ void Network::operator =(const Network &n){
         m[i] = n[i];
     for(uint i = 0;i < layers;i++)
         v[i] = n(i);
-    for(uint i = 0;i < layers-1;i++)
-        bias[i] = n.bias[i];
+    if(n.has_bias){
+        this->bias = new Vectord[n.size()-1];
+        for(uint i = 0;i < layers-1;i++)
+            bias[i] = n.bias[i];
+        this->has_bias = true;
+    }
+    else{
+        uint max_size = 0;
+        for(uint i = 0;i < layers-1;i++)
+            if(this->nodes[i+1] > max_size)
+                max_size = nodes[i+1];
+        this->bias = new Vectord(max_size);
+        this->has_bias = false;
+    }
 }
 
 bool Network::operator +=(const Network &partner){
@@ -80,10 +111,11 @@ bool Network::operator +=(const Network &partner){
             for(uint k = 0;k < this->m[i].getHeight();k++)
                 if((int)rand() % 2 == 0)
                     this->m[i][j][k] = partner[i][j][k];
-    for(uint i = 0;i < this->size()-1;i++)
-        for(uint j = 0;j < this->bias[i].size();j++)
-            if((int)rand() % 2 == 0)
-                this->bias[i][j] = partner.bias[i][j];
+    if(this->has_bias)
+        for(uint i = 0;i < this->size()-1;i++)
+            for(uint j = 0;j < this->bias[i].size();j++)
+                if((int)rand() % 2 == 0)
+                    this->bias[i][j] = partner.bias[i][j];
     return true;
 }
 
@@ -96,8 +128,12 @@ Vectord &Network::operator ()(unsigned int index) const{
 }
 
 void Network::update(){
-    for(uint i = 0;i < layers-1;i++)
-        this->v[i+1] = sig(this->v[i]*m[i]+bias[i]);
+    for(uint i = 0;i < layers-1;i++){
+        if(this->has_bias)
+            this->v[i+1] = sig(this->v[i]*m[i]+bias[i]);
+        else
+            this->v[i+1] = sig(this->v[i]*m[i]);
+    }
         
 }
 
@@ -128,9 +164,10 @@ bool Network::SavetoFile(const string file) const{
         for(uint j = 0;j < this->m[i].getWidth();j++)
             for(uint k = 0;k < this->m[i].getHeight();k++)
                 out << this->m[i][j][k] << endl;
-    for(uint i = 0;i < this->size()-1;i++)
-        for(uint j = 0;j < this->bias[i].size();j++)
-            out << this->bias[i][j] << endl;
+    if(this->has_bias)
+        for(uint i = 0;i < this->size()-1;i++)
+            for(uint j = 0;j < this->bias[i].size();j++)
+                out << this->bias[i][j] << endl;
     out.close();
     return true;
 }
@@ -168,17 +205,18 @@ bool Network::LoadFile(const string file){
                     m[i][j][k] = atof(line.c_str());
                 }
         }
-        for(uint i = 0;i < this->size()-1;i++){
-            bias[i] = Vectord(nodes[i+1]);
-            for(uint j = 0;j < this->nodes[i+1];j++){
+        if(this->has_bias)
+            for(uint i = 0;i < this->size()-1;i++){
+                bias[i] = Vectord(nodes[i+1]);
+                for(uint j = 0;j < this->nodes[i+1];j++){
                 bias[i][j] = atof(line.c_str());
+                }
             }
-        }
         
 	    return true;
 	}
 	else
-		return false;
+        return false;
     in.close();
     return true;
 }
@@ -197,16 +235,20 @@ void Network::randomize(double randomness,double shift){
             for(uint k = 0;k < m[i].getHeight();k++)
                 if(rand()/(RAND_MAX+1.0) < randomness)
                     m[i][j][k] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
-    for(uint i = 0;i < layers-1;i++)
-        for(uint j = 0;j < this->bias[i].size();j++)
-            if(rand()/(RAND_MAX+1.0) < randomness)
-                bias[i][j] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
+    if(has_bias)
+        for(uint i = 0;i < layers-1;i++)
+            for(uint j = 0;j < this->bias[i].size();j++)
+                if(rand()/(RAND_MAX+1.0) < randomness)
+                    bias[i][j] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
             
 }
 
 
 Vectord &Network::getbias(unsigned int index) const{
-    return bias[index];
+    if(has_bias)
+        return bias[index];
+    else
+        return *bias;
 }
 
 

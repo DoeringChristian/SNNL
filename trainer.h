@@ -5,6 +5,11 @@
 #include <math.h>
 #include <iostream>
 
+/*
+ * Use minimal 3 agents per simulation
+ * otherwise you will not have any mutation.
+ */
+
 using namespace std;
 
 class Network;
@@ -22,7 +27,7 @@ public:
     uint size() const;
     Network &current() const;
     Network &update(double fitness, double randomness,double shift);
-    void randomize(double randomness, double shift);
+    void randomize(double randomness, double shift, uint start);
     void setRandomness(double randomness);
 };
 
