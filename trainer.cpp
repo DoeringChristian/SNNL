@@ -14,7 +14,7 @@ Trainer::Trainer(Network n, double randomness, unsigned int population){
     for(uint i = 0;i < population;i++)
         this->n[i] = n;
     this->currentNet = 0;
-    randomize(randomness,2,0);
+    randomize(randomness,2,1);
 }
 
 Trainer::~Trainer(){
