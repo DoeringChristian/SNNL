@@ -15,7 +15,7 @@ using namespace std;
 class Network;
 
 class Trainer{
-    Network *n;
+    Network *networks;
     unsigned int length;
     double randomness;
 public:

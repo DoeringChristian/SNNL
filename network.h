@@ -11,21 +11,21 @@ using namespace std;
 class Network{
     //variables
     unsigned int layers;
-    unsigned int *nodes;
+    unsigned int *structure;
     double fitness;
-    Matrixd *m;
-    Vectord *v;
+    Matrixd *weights;
+    Vectord *nodes;
     Vectord *bias;
     double randomness;
     bool has_bias;
 public:
     //con-/destructors
     Network();
-    Network(unsigned int nodes[], unsigned int layers,bool has_bias = true);
+    Network(unsigned int structure[], unsigned int layers,bool has_bias = true);
     Network(const Network &copy);
     ~Network();
     //operators
-    void operator=(const Network &n);
+    void operator=(const Network &copy);
     Matrixd &operator[](unsigned int index) const;
     Vectord &operator()(unsigned int index) const;
     Vectord &getbias(unsigned int index) const;
