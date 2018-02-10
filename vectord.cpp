@@ -40,12 +40,14 @@ Vectord Vectord::operator *(const Matrixd &m) const{
 Vectord Vectord::operator +(const Vectord &v) const{
     Vectord v2(v.size());
     if(v.size() == this->size())
-        for(int i = 0;i < v.size();i++)
+        for(uint i = 0;i < v.size();i++)
             v2[i] = v[i]+this->vect[i];
     return v2;
 }
 
 void Vectord::operator =(const Vectord &v){
+    if(&v == this)
+        return;
     //= operator to copy the values of the pointer-array
     delete [] vect;
     this->length = v.size();

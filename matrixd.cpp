@@ -36,6 +36,8 @@ double* Matrixd::operator [](unsigned int x) const{
 }
 
 void Matrixd::operator =(const Matrixd &m){
+    if(&m == this)
+        return;
     //delete
     for(uint i = 0;i < this->width;i++)
         delete [] this->matrix[i];

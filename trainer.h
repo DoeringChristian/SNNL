@@ -5,6 +5,14 @@
 #include <math.h>
 #include <iostream>
 
+enum Reproduction{
+    SOF,
+    First_Second,
+    First_Third,
+    SOF_First_Second,
+    SOF_First_Third
+};
+
 /*
  * Use minimal 3 agents per simulation
  * otherwise you will not have any mutation.
@@ -18,10 +26,11 @@ class Trainer{
     Network *networks;
     unsigned int length;
     double randomness;
+    Reproduction rep;
 public:
     unsigned int currentNet;
     Trainer();
-    Trainer(Network n,double randomness,unsigned int population = 5);
+    Trainer(Network n,double randomness,Reproduction rep = SOF,unsigned int population = 5);
     ~Trainer();
     Network &operator[](uint index) const;
     uint size() const;

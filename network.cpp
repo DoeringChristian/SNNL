@@ -66,6 +66,8 @@ Network::~Network(){
 }
 
 void Network::operator =(const Network &copy){
+    if(&copy == this)
+        return;
     delete [] weights;
     delete [] structure;
     delete [] nodes;
