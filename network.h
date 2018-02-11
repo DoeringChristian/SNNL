@@ -5,6 +5,7 @@
 #include <fstream>
 #include "trainer.h"
 #include <stdlib.h>
+#define OUTPUT
 
 using namespace std;
 

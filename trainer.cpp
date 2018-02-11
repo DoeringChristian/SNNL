@@ -55,11 +55,13 @@ Network &Trainer::update(double fitness, double randomness, double shift){
             sorted[i] = sorted[k];
             sorted[k] = first;
         }
-        for(uint i = 0;i < length;i++){
+        for(uint i = 0;i < length;i++)
             networks[i] = sorted[0];
+#ifdef OUTPUT
+        for(uint i = 0;i < length;i++)
             cout << sorted[i].getFitness() << "|";
-        }
         cout << endl;
+#endif
         //Reproduction Methodes:
         switch(rep){
         case SOF:
