@@ -57,11 +57,6 @@ Network &Trainer::update(double fitness, double randomness, double shift){
         }
         for(uint i = 0;i < length;i++)
             networks[i] = sorted[0];
-#ifdef OUTPUT
-        for(uint i = 0;i < length;i++)
-            cout << sorted[i].getFitness() << "|";
-        cout << endl;
-#endif
         //Reproduction Methodes:
         switch(rep){
         case SOF:
