@@ -61,6 +61,15 @@ unsigned int Vectord::size() const{
     return length;
 }
 
+bool Vectord::operator ==(const Vectord &comp) const{
+    if(this->size() != comp.size())
+        return false;
+    for(uint i = 0;i < length;i++)
+        if(this->vect[i] != comp[i])
+            return false;
+    return true;
+}
+
 
 double sig(double d){
     return 1/(1+pow(E,-d));
@@ -73,6 +82,7 @@ Vectord sig(const Vectord &s){
         v[i] = sig(s[i]);
     return v;
 }
+
 
 
 

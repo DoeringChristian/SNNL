@@ -28,6 +28,7 @@ public:
     void operator=(const Network &copy);
     Matrixd &operator[](unsigned int index) const;
     Vectord &operator()(unsigned int index) const;
+    bool operator ==(const Network &comp) const;
     Vectord &getbias(unsigned int index) const;
     bool operator +=(const Network &partner);
     //functions

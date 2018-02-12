@@ -28,19 +28,15 @@ class Network;
 class Trainer{
     Network *networks;
     unsigned int length;
-    double randomness;
-    Reproduction rep;
 public:
-    unsigned int currentNet;
     Trainer();
-    Trainer(Network n,double randomness,Reproduction rep = SOF,unsigned int population = 5);
+    Trainer(Network n,uint population = 10);
     ~Trainer();
-    Network &operator[](uint index) const;
+    Network &operator [](uint index) const;
     uint size() const;
-    Network &current() const;
-    Network &update(double fitness, double randomness,double shift);
-    void randomize(double randomness, double shift, uint start);
-    void setRandomness(double randomness);
+    uint best() const;
+    void update(double randomness,double shift);
+    void resetFitness();
 };
 
 #endif // TRAINER_H

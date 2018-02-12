@@ -17,6 +17,7 @@ public:
     //operators
     double* operator[](unsigned int x) const;
     void operator=(const Matrixd &m);
+    bool operator ==(const Matrixd &comp) const;
     //getters
     unsigned int getHeight() const;
     unsigned int getWidth() const;

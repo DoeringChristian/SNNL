@@ -60,3 +60,15 @@ unsigned int Matrixd::getHeight() const{
 unsigned int Matrixd::getWidth() const{
     return width;
 }
+
+bool Matrixd::operator ==(const Matrixd &comp) const{
+    if(this->getHeight() != comp.getHeight())
+        return false;
+    if(this->getWidth() != comp.getWidth())
+        return false;
+    for(uint i = 0;i < width;i++)
+        for(uint j = 0;j < height;j++)
+            if(this->matrix[i][j] != comp[i][j])
+                return false;
+    return true;
+}

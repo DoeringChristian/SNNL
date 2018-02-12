@@ -73,6 +73,8 @@ void Network::operator =(const Network &copy){
     delete [] nodes;
     if(this->has_bias)
         delete [] bias;
+    else
+        delete bias;
     fitness = copy.getFitness();
     this->structure = new unsigned int[copy.size()];
     for(uint i = 0;i < copy.size();i++)
@@ -251,6 +253,25 @@ Vectord &Network::getbias(unsigned int index) const{
         return bias[index];
     else
         return *bias;
+}
+
+bool Network::operator ==(const Network &comp) const{
+    if(this->size() != comp.size())
+        return false;
+    for(uint i = 0;i < size();i++)
+        if(this->sizeAt(i) != comp.sizeAt(i))
+            return false;
+    for(uint i = 0;i < this->size()-1;i++){
+        if(!(this->weights[i] == comp[i]))
+            return false;
+    }
+    if(has_bias != comp.has_bias)
+        return false;
+    if(this->has_bias)
+        for(uint i = 0;i < this->size()-1;i++)
+            if(!(this->bias[i] == comp.getbias(i)))
+                return false;
+    return true;
 }
 
 
