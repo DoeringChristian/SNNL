@@ -55,33 +55,66 @@ Network &Trainer::update(double fitness, double randomness, double shift){
             sorted[i] = sorted[k];
             sorted[k] = first;
         }
-        for(uint i = 0;i < length;i++)
-            networks[i] = sorted[0];
         //Reproduction Methodes:
         switch(rep){
         case SOF:
+            for(uint i = 0;i < length;i++)
+                networks[i] = sorted[0];
             for(uint i = 1;i < length;i++)
                 randomize(randomness,shift,1);
             break;
         case First_Second:
+            for(uint i = 0;i < length;i++)
+                networks[i] = sorted[0];
             for(uint i = 0;i < length;i++)
                 networks[i] += sorted[1];
             randomize(randomness,shift,1);
             break;
         case First_Third:
             for(uint i = 0;i < length;i++)
+                networks[i] = sorted[0];
+            for(uint i = 0;i < length;i++)
                 networks[i] += sorted[2];
             break;
         case SOF_First_Second:
+            for(uint i = 0;i < length;i++)
+                networks[i] = sorted[0];
             for(uint i = 1;i < length;i++)
                 networks[i] += sorted[1];
-            randomize(randomness,shift,2);
+            randomize(randomness,shift,1);
             break;
         case SOF_First_Third:
+            for(uint i = 0;i < length;i++)
+                networks[i] = sorted[0];
             for(uint i = 1;i < length;i++)
                 networks[i] += sorted[2];
             randomize(randomness,shift,2);
             break; 
+        case Cross:
+            networks[0] = sorted[length-1];
+            for(uint i = length-1;i-- > 0;)
+                networks[0] += sorted[i];
+            for(uint i = 1;i < length;i++)
+                networks[i] = networks[0];
+            randomize(randomness,shift,1);
+            break;
+        case SOF_Cross:
+            networks[0] = sorted[0];
+            networks[1] = sorted[length-1];
+            for(uint i = length-1;i-- > 0;)
+                networks[1] += sorted[i];
+            for(uint i = 2;i < length;i++)
+                networks[i] = networks[1];
+            randomize(randomness,shift,2);
+            break;
+        case SOF_First_Second_Third:
+            networks[0] = sorted[0];
+            networks[1] = sorted[2];
+            networks[1] += sorted[1];
+            networks[1] += sorted[0];
+            for(uint i = 2;i < length;i++)
+                networks[1] = networks[1];
+            randomize(randomness,shift,2);
         }
         this->currentNet = 0;
     }

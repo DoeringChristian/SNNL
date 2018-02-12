@@ -10,7 +10,10 @@ enum Reproduction{
     First_Second,
     First_Third,
     SOF_First_Second,
-    SOF_First_Third
+    SOF_First_Third,
+    Cross,
+    SOF_Cross,
+    SOF_First_Second_Third
 };
 
 /*
