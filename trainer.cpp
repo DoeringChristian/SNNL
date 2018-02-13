@@ -6,13 +6,14 @@ Trainer::Trainer(){
 }
 
 Trainer::Trainer(Network n, uint population){
+    srand(time(0));
     this->length = population;
     networks = new Network[population];
     for(uint i = 0;i < length;i++)
         networks[i] = n;
     for(uint i = 1;i < length;i++)
         networks[i].randomize(1,2);
-    srand(time(0));
+    resetFitness();
 }
 
 Trainer::~Trainer(){
@@ -44,6 +45,7 @@ void Trainer::update(double randomness, double shift){
         networks[i] += n2;
         networks[i].randomize(randomness,shift);
     }
+    networks[0] = n;
 }
 
 uint Trainer::best() const{

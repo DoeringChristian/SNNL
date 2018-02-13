@@ -54,7 +54,6 @@ Network::Network(const Network &copy){
         this->bias = new Vectord(max_size);
         this->has_bias = false;
     }
-        
 }
 
 Network::~Network(){
@@ -82,7 +81,6 @@ void Network::operator =(const Network &copy){
     this->layers = copy.size();
     this->nodes = new Vectord[copy.size()];
     this->weights = new Matrixd[copy.size()-1];
-    this->bias = new Vectord[copy.size()-1];
     for(uint i = 0;i < layers-1;i++)
         weights[i] = copy[i];
     for(uint i = 0;i < layers;i++)
