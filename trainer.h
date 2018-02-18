@@ -35,7 +35,7 @@ public:
     Network &operator [](uint index) const;
     uint size() const;
     uint best() const;
-    void update(double randomness,double shift);
+    void update(double randomness, double shift, double percentage, double swap_percentage);
     void resetFitness();
 };
 

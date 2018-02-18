@@ -121,6 +121,26 @@ bool Network::operator +=(const Network &partner){
     return true;
 }
 
+bool Network::cross(const Network &partner, double swap_percentage){
+    if(size() != partner.size())
+        return false;
+    for(uint i = 0;i < size();i++)
+        if(this->sizeAt(i) != partner.sizeAt(i))
+            return false;
+    
+    for(uint i = 0;i < this->size()-1;i++)
+        for(uint j = 0;j < this->weights[i].getWidth();j++)
+            for(uint k = 0;k < this->weights[i].getHeight();k++)
+                if(rand()/(RAND_MAX+1.0) < swap_percentage)
+                    this->weights[i][j][k] = partner[i][j][k];
+    if(this->has_bias)
+        for(uint i = 0;i < this->size()-1;i++)
+            for(uint j = 0;j < this->bias[i].size();j++)
+                if(rand()/(RAND_MAX+1.0) < swap_percentage)
+                    this->bias[i][j] = partner.bias[i][j];
+    return true;
+}
+
 Matrixd &Network::operator[](unsigned int index) const{
     return weights[index];
 }
@@ -236,12 +256,12 @@ void Network::randomize(double randomness,double shift){
         for(uint j = 0;j < weights[i].getWidth();j++)
             for(uint k = 0;k < weights[i].getHeight();k++)
                 if(rand()/(RAND_MAX+1.0) < randomness)
-                    weights[i][j][k] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
+                    weights[i][j][k] += (((double)rand() / (double)(RAND_MAX))*shift*2)-shift;
     if(has_bias)
         for(uint i = 0;i < layers-1;i++)
             for(uint j = 0;j < this->bias[i].size();j++)
                 if(rand()/(RAND_MAX+1.0) < randomness)
-                    bias[i][j] += (((double)rand() / (double)(RAND_MAX))*2-1)*shift;
+                    bias[i][j] += (((double)rand() / (double)(RAND_MAX))*shift*2)-shift;
             
 }
 

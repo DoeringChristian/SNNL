@@ -31,6 +31,7 @@ public:
     bool operator ==(const Network &comp) const;
     Vectord &getbias(unsigned int index) const;
     bool operator +=(const Network &partner);
+    bool cross(const Network &partner,double swap_percentage);
     //functions
     void update();
     unsigned int size() const;
